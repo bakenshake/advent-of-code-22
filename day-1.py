@@ -3,7 +3,6 @@ Advent of Code - Day 1: ???
 Helper functions to reuse for puzzles - thanks Danielle Lucek!
 """
 import timeit
-from collections import Counter
 from typing import List
 
 def input_as_string(filename:str) -> str:
