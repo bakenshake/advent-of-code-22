@@ -8,8 +8,8 @@ from typing import List
 
 def input_as_string(filename:str) -> str:
     """returns the content of the input file as a string"""
-    with open(filename) as file_to_open:
-        return file_to_open.read().rstrip("\n")
+    with open(filename) as f:
+        return f.read().rstrip("\n")
 
 def input_as_lines(filename:str) -> List[str]:
     """Return a list where each line in the input file is an element of the list"""
@@ -22,5 +22,5 @@ def input_as_ints(filename:str) -> List[int]:
     return list(map(line_as_int, lines))
 
 FILENAME = "data/AoC-1.txt"
-file_input = input_as_lines(FILENAME)
+file_input = input_as_string(FILENAME)
 print(file_input)
