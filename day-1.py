@@ -2,7 +2,7 @@
 Advent of Code - Day 1: ???
 Helper functions to reuse for puzzles - thanks Danielle Lucek!
 """
-import numpy
+import timeit
 from collections import Counter
 from typing import List
 
@@ -21,7 +21,7 @@ def input_as_ints(filename:str) -> List[int]:
     line_as_int = lambda l: int(l.rstrip('\n'))
     return list(map(line_as_int, lines))
 
-def parse_input(file_input):
+def part_one(file_input):
     singleElfRations = []
     currElf = 0
     for i in file_input:
@@ -33,17 +33,29 @@ def parse_input(file_input):
             singleElfRations.append(currElf)
             currElf = 0
 
+    #print("Largest ration is:", max(singleElfRations))
     return singleElfRations
 
-FILENAME = "data/1-input.txt"
-file_input = input_as_lines(FILENAME)
-#print(file_input)
-elfRations = parse_input(file_input)
-print("Largest ration is:", max(elfRations))
+def part_two(elfRations):
+    elfRations.sort()
+    topThree = elfRations[-1] + elfRations[-2] + elfRations[-3]
+    return topThree
 
-### PART TWO ###
+def solution_part_1():
+    FILENAME = "data/1-input.txt"
+    file_input = input_as_lines(FILENAME)
+    elfRations = part_one(file_input)
+    return max(elfRations)
 
-elfRations.sort()
-print("Top 3 elves carrying most rations are: \n" + "1." + str(elfRations[-1]) + "\n" + "2." + str(elfRations[-2]) + "\n" + "3." + str(elfRations[-3]))
-topThree = elfRations[-1] + elfRations[-2] + elfRations[-3]
-print("Top 3 elves combined: " + str(topThree))
+def solution_part_2():
+    FILENAME = "data/1-input.txt"
+    file_input = input_as_lines(FILENAME)
+    elfRations = part_one(file_input)
+    return part_two(elfRations)
+
+print(f"Solution Part 1 = {solution_part_1()}, "
+        f'Time = {timeit.timeit("solution_part_1()", globals=locals(), number=10)/10}s'
+    )
+print(f"Solution Part 2 = {solution_part_2()}, "
+        f'Time = {timeit.timeit("solution_part_2()", globals=locals(), number=10)/10}s'
+    )
