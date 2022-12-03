@@ -1,5 +1,5 @@
 """
-Advent of Code - Day 1: ???
+Advent of Code - Day 2
 Helper functions to reuse for puzzles - thanks Danielle Lucek!
 """
 import timeit
