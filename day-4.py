@@ -55,6 +55,8 @@ def solution_part_1():
                 
                 overlap = list(set(sectionOneWork).intersection(set(sectionTwoWork)))
                 print(overlap)
+                intersect = [x for x in sectionOneWork if x in sectionTwoWork]
+                print(intersect)
 
                 if len(overlap) == len(sectionOneWork):
                     print("elf one work duped")
@@ -65,7 +67,7 @@ def solution_part_1():
                     rangeCovered +=1     
                     print("Ranges overlapped: " + str(rangeCovered))
                 else:
-                    print("none duped here")
+                    print("")
                     noneDuplicated +=1
                 
                 #reset it all
@@ -79,13 +81,6 @@ def solution_part_1():
     print("Ranges duped: " + str(rangeCovered))
     print("Number of pairs: " + str(len(file_input)))
     return rangeCovered
-
-def convert_to_string(s):
-    new = ""
-    for x in s:
-        new += x
-
-    return new
 
 def solution_part_2():
     FILENAME = "data/4-sample.txt"
