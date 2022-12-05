@@ -81,20 +81,20 @@ def solution_part_1():
     file_input = input_as_lines(FILENAME)
     prioritySum = 0
     for i in file_input:
-        #print("Rucksack: " + i)
+        print("Rucksack: " + i)
         compartmentOne = i[0:len(i)//2]
         compartmentTwo = i[len(i)//2 if len(i)%2 == 0 else ((len(i)//2)+1):]
         compartmentOne = list(compartmentOne)
         compartmentTwo = list(compartmentTwo)
-        #print(compartmentOne)
-        #print(compartmentTwo)
+        print(compartmentOne)
+        print(compartmentTwo)
         k = 0
         itemFound = False
         while k != len(compartmentTwo):
             for j in compartmentOne:
                 if j == compartmentTwo[k]:
                     item = j
-                    #print("Item type found: " + item)
+                    print("Item type found: " + item)
                     if item in priorityList:
                         prioritySum += priorityList.get(item)
                     itemFound = True
