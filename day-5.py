@@ -22,12 +22,12 @@ def input_as_ints(filename:str) -> List[int]:
     line_as_int = lambda l: int(l.rstrip('\n'))
     return list(map(line_as_int, lines))
 
-crate1 = ['Z', 'N']
+"""crate1 = ['Z', 'N']
 crate2 = ['M', 'C', 'D']
 crate3 = ['P']
 crates = [crate1, crate2, crate3] 
-
-"""crate1 = ['Z', 'J', 'N', 'W', 'P', 'S']
+"""
+crate1 = ['Z', 'J', 'N', 'W', 'P', 'S']
 crate2 = ['G', 'S', 'T']
 crate3 = ['V', 'Q', 'R', 'L', 'H']
 crate4 = ['V', 'S', 'T', 'D']
@@ -36,7 +36,7 @@ crate6 = ['M', 'W', 'T', 'J', 'D', 'C', 'Z', 'L']
 crate7 = ['L', 'P', 'M', 'W', 'G', 'T', 'J']
 crate8 = ['N', 'G', 'M', 'T', 'B', 'F', 'Q', 'H']
 crate9 = ['R', 'D', 'G', 'C', 'P', 'B', 'Q', 'W']
-crates = [crate1, crate2, crate3, crate4, crate5, crate6, crate7, crate8, crate9]"""
+crates = [crate1, crate2, crate3, crate4, crate5, crate6, crate7, crate8, crate9]
 
 def solution_part_1():
     FILENAME = "data/5-input.txt"
@@ -70,13 +70,13 @@ def solution_part_1():
     print(topOfStacks)
 
 def solution_part_2():
-    FILENAME = "data/5-sample.txt"
+    FILENAME = "data/5-input.txt"
     file_input = input_as_lines(FILENAME)
-    print(crates)
+    #print(crates)
     topOfStacks = []
     for i in file_input:
         numbers = re.findall("\d+",i)
-        print(numbers)
+        #print(numbers)
         cratesToMove = int(numbers[0])
         fromStack = int(numbers[1])
         toStack = int(numbers[2])
@@ -86,7 +86,16 @@ def solution_part_2():
         itemsToRemove = cratesToMove
         #print(crates[fromStack-1])
         #print(crates[toStack-1])
-        #print("--------------------")
+        print(crate1)
+        print(crate2)
+        print(crate3)
+        print(crate4)
+        print(crate5)
+        print(crate6)
+        print(crate7)
+        print(crate8)
+        print(crate9)
+        print("--------------------")
 
         #move to stack
         while cratesToMove != 0:
@@ -101,6 +110,15 @@ def solution_part_2():
         
         #print(crates[fromStack-1])
         #print(crates[toStack-1])
+        print(crate1)
+        print(crate2)
+        print(crate3)
+        print(crate4)
+        print(crate5)
+        print(crate6)
+        print(crate7)
+        print(crate8)
+        print(crate9)
             
     iterator = 0
     while iterator != len(crates):
