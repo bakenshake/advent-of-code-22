@@ -32,6 +32,7 @@ def solution_part_1():
     sectionTwoWork = []
     rangeCovered = 0
     noneDuplicated = 0
+    allOverlaps = 0
     for i in file_input:
         assignments = i.split(',')
         print(assignments)
@@ -56,6 +57,9 @@ def solution_part_1():
                 
                 overlap = list(set(sectionOneWork).intersection(set(sectionTwoWork)))
                 print(overlap)
+
+                if len(overlap) > 0:
+                    allOverlaps += 1
 
                 if len(overlap) == len(sectionOneWork):
                     print("elf one work duped")
@@ -82,11 +86,14 @@ def solution_part_1():
     print("No dupes: " + str(noneDuplicated))
     print("Ranges duped: " + str(rangeCovered))
     print("Number of pairs: " + str(len(file_input)))
+    print("All overlaps: " + str(allOverlaps))
+    
     return rangeCovered
 
 def solution_part_2():
     FILENAME = "data/4-sample.txt"
     file_input = input_as_lines(FILENAME)
+
 
 print(solution_part_1())
 
