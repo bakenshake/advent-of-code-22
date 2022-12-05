@@ -22,7 +22,7 @@ def input_as_ints(filename:str) -> List[int]:
     return list(map(line_as_int, lines))
 
 def solution_part_1():
-    FILENAME = "data/4-sample.txt"
+    FILENAME = "data/4-input.txt"
     file_input = input_as_lines(FILENAME)
     print(file_input)
     elfPair = []
@@ -34,12 +34,13 @@ def solution_part_1():
     noneDuplicated = 0
     for i in file_input:
         assignments = i.split(',')
-        #print(assignments)
+        print(assignments)
         for j in assignments:
             range = j.split('-')
-            #print(range)
+            print(range)
             elfPair.append(range)
-            if assignments.index(j) % 2 != 0:
+            print(assignments.index(j))
+            if len(elfPair) == 2:
                 print(elfPair)
                 elfOneRange = int(elfPair[0][0])
                 while elfOneRange <= int(elfPair[0][1]):
@@ -55,8 +56,6 @@ def solution_part_1():
                 
                 overlap = list(set(sectionOneWork).intersection(set(sectionTwoWork)))
                 print(overlap)
-                intersect = [x for x in sectionOneWork if x in sectionTwoWork]
-                print(intersect)
 
                 if len(overlap) == len(sectionOneWork):
                     print("elf one work duped")
@@ -66,6 +65,9 @@ def solution_part_1():
                     print("elf two work duped")
                     rangeCovered +=1     
                     print("Ranges overlapped: " + str(rangeCovered))
+                elif (elfPair[0][0] == elfPair [1][0]) and (elfPair[0][1] == elfPair[1][1]):
+                    print("same assignment")
+                    rangeCovered += 1
                 else:
                     print("")
                     noneDuplicated +=1
