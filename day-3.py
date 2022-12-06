@@ -1,8 +1,9 @@
 """
-Advent of Code - Day 2
+Advent of Code - Day 3
 Helper functions to reuse for puzzles - thanks Danielle Lucek!
 """
 import timeit
+from tokenize import group
 from typing import List
 import re
 
@@ -81,20 +82,20 @@ def solution_part_1():
     file_input = input_as_lines(FILENAME)
     prioritySum = 0
     for i in file_input:
-        print("Rucksack: " + i)
+        #print("Rucksack: " + i)
         compartmentOne = i[0:len(i)//2]
         compartmentTwo = i[len(i)//2 if len(i)%2 == 0 else ((len(i)//2)+1):]
         compartmentOne = list(compartmentOne)
         compartmentTwo = list(compartmentTwo)
-        print(compartmentOne)
-        print(compartmentTwo)
+        #print(compartmentOne)
+        #print(compartmentTwo)
         k = 0
         itemFound = False
         while k != len(compartmentTwo):
             for j in compartmentOne:
                 if j == compartmentTwo[k]:
                     item = j
-                    print("Item type found: " + item)
+                    #print("Item type found: " + item)
                     if item in priorityList:
                         prioritySum += priorityList.get(item)
                     itemFound = True
@@ -106,8 +107,31 @@ def solution_part_1():
     return prioritySum
         
 def solution_part_2():
-    FILENAME = "data/3-sample.txt"
+    FILENAME = "data/3-input.txt"
     file_input = input_as_lines(FILENAME)
+    prioritySum = 0
+    elfGroup = []
+    groupCount = 0
+    for i in file_input:
+        groupCount +=1
+        #print("Rucksack: " + i)
+        elfGroup.append(i)
+        
+        if groupCount % 3 == 0:
+            #print(groupCount)
+            badge = intersection(elfGroup)
+            #print(badge)
+            prioritySum += priorityList.get(badge[0])
+            if intersection(elfGroup) != []:
+                elfGroup = []
+
+    return prioritySum
+
+def intersection(lists):
+    allElements = lists[0]
+    for i in range(1,len(lists)):
+        allElements = [x for x in allElements if x in lists[i]]
+    return allElements
 
 print(f"Solution Part 1 = {solution_part_1()}, "
         f'Time = {timeit.timeit("solution_part_1()", globals=locals(), number=10)/10}s'
