@@ -51,7 +51,7 @@ class TreeNode:
       nodes_to_visit += current_node.children
 
 def solution_part_1():
-    FILENAME = "data/7-sample.txt"
+    FILENAME = "data/7-input.txt"
     file_input = input_as_lines(FILENAME)
     #print(file_input)
     all_directories = []
@@ -59,7 +59,7 @@ def solution_part_1():
     dir = "root"
     for i in file_input:
         commands = re.findall('^\$', i) #matching commands
-        directories = re.findall('^dir', i)
+        directories = re.findall('^dir \w+', i)
         print(i)
         if len(commands) > 0:
             #do the action
@@ -72,14 +72,14 @@ def solution_part_1():
                     #dir change in
                     prevDir = dir
                     print("--prev dir: " + prevDir)
-                    dir = cd
+                    dir = i.strip("$ cd")
                     print("--dir changed to: " + dir)
                     if dir not in all_directories:
                         all_directories.append(dir)
                 elif cd != '/':
                     #dir change out
                     print("--dir change out")
-                    print(all_directories)
+                    #print(all_directories)
                     dir = all_directories[len(all_directories)-1]
                     print("--dir changed to: " + dir)
                 elif cd == '/':
@@ -92,7 +92,7 @@ def solution_part_1():
             if dir != "root":
                 dirChild = i[len(i)-1]
                 print("--dir child: "+dirChild)
-            if dir == "root":
+            if dir == "root" and dir not in all_directories: #for the first dir only
                 all_directories.append(dir)
             #print(dir)
             print("--curr dir: " + dir)
@@ -105,25 +105,42 @@ def solution_part_1():
             print("--dir file size is: " + directory_size)
             dir_value_pairs[directory_size] = dir
     
-    #calculate_file_size(all_directories, dir_value_pairs)
-    print(all_directories)
-    print(dir_value_pairs)
+    print("-----------------------")
+    calculate_file_size(all_directories, dir_value_pairs)
+    #print(all_directories)
+    #print(dir_value_pairs)
 
 def calculate_file_size(dirs, dir_pairs):
+    
+    for key, value in dict(dir_pairs).items():
+        if value == 'root':
+            del dir_pairs[key]
+            del value
+    
+    print(dir_pairs)
+            
     dir_totals = {}
     total = 0
-    iterator = 0
+    iterator = 1
     for key in dir_pairs:
         print("Key: "+key+" ----- Value: "+dir_pairs[key])
+        print("iterating on: "+dirs[iterator])
+        print(iterator)
+        print(len(dirs))
         if dir_pairs[key] == dirs[iterator]:
-            print(dir_pairs[key])
-            print(dirs[iterator])
+            #print(dir_pairs[key])
             total += int(key)
             dir_totals[dir_pairs[key]] = total
-            print(total)
+            print("Current total is: "+str(total))
+        elif dirs[iterator] != dirs[iterator+1]: #only one file
+            total = 0
+            total += int(key)
+            dir_totals[dir_pairs[key]] = total
+            print("Current total is: "+str(total))
         else:
             total = 0
             iterator +=1
+            print("next iterator: " + dirs[iterator])
 
     print(dir_totals)
             
