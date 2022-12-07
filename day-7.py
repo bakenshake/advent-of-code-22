@@ -90,7 +90,7 @@ def solution_part_1():
         elif len(directories) > 0:
             #this dir is a child of a dir
             if dir != "root":
-                dirChild = i[len(i)-1]
+                dirChild = i.strip("$ cd")
                 print("--dir child: "+dirChild)
             if dir == "root" and dir not in all_directories: #for the first dir only
                 all_directories.append(dir)
@@ -111,36 +111,33 @@ def solution_part_1():
     #print(dir_value_pairs)
 
 def calculate_file_size(dirs, dir_pairs):
-    
-    for key, value in dict(dir_pairs).items():
-        if value == 'root':
-            del dir_pairs[key]
-            del value
-    
-    print(dir_pairs)
             
     dir_totals = {}
     total = 0
     iterator = 1
     for key in dir_pairs:
         print("Key: "+key+" ----- Value: "+dir_pairs[key])
-        print("iterating on: "+dirs[iterator])
-        print(iterator)
-        print(len(dirs))
+        #print("iterating on: "+dirs[iterator])
+        #print(iterator)
+        #print(len(dirs))
         if dir_pairs[key] == dirs[iterator]:
             #print(dir_pairs[key])
             total += int(key)
             dir_totals[dir_pairs[key]] = total
             print("Current total is: "+str(total))
-        elif dirs[iterator] != dirs[iterator+1]: #only one file
-            total = 0
-            total += int(key)
-            dir_totals[dir_pairs[key]] = total
-            print("Current total is: "+str(total))
+        elif iterator <= len(dirs)-2:
+            if dirs[iterator] != dirs[iterator+1]: #only one file
+                total = 0
+                total += int(key)
+                dir_totals[dir_pairs[key]] = total
+                iterator += 1
+                print("Current total is: "+str(total))
         else:
             total = 0
-            iterator +=1
-            print("next iterator: " + dirs[iterator])
+            #print(iterator)
+            if iterator <= len(dirs)-2: #minus 2 for the root entry we skip
+                iterator +=1
+                print("next iterator: " + dirs[iterator])
 
     print(dir_totals)
             
