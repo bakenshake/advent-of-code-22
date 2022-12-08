@@ -21,7 +21,7 @@ def input_as_ints(filename:str) -> List[int]:
     return list(map(line_as_int, lines))
 
 def solution_part_1():
-    FILENAME = "data/8-sample.txt"
+    FILENAME = "data/8-input.txt"
     file_input = input_as_lines(FILENAME)
     row = []
     grid = []
@@ -38,26 +38,31 @@ def solution_part_1():
                 row = []
         rowCount+=1
 
-    print(rowCount)
     #print(grid)
     #print("grid length is: "+str(gridLength))
     
     check_visibility(grid, gridLength, rowCount)
 
-def check_visibility(grid, gridLength, rowCount):
-
+def print_grid(grid):
     #print grid
     for index, tree in enumerate(grid):
         print(index, tree)
         gridLength = len(tree)
+
+def check_visibility(grid, gridLength, rowCount):
+
+    print_grid(grid)
 
     trees = 0
     for row in range(0, len(grid)):
         for col in range(0,len(grid)):
             if parse_trees(grid, gridLength, row, col) == 1:
                 trees += 1
+                grid[row][col] = 'X'
+                #print_grid(grid)
             #print("Trees visible: "+str(trees))
     
+    print_grid(grid)
     gridLength = gridLength*2
     rowCount = rowCount*2
     edgeTrees = (gridLength + rowCount)-4
@@ -69,36 +74,15 @@ def check_visibility(grid, gridLength, rowCount):
     print("Total Trees: "+str(trees))
 
 def parse_trees(grid, gridLength, row, col):
-    directions = {'left': 0, 'right': 0, 'above': 0, 'below': 0} #0 means not visible, 1 means visible
-    print("Current tree: "+grid[row][col]+ " at row: " +str(row)+" col: "+str(col))
+    #print("Current tree: "+grid[row][col]+ " at row: " +str(row)+" col: "+str(col))
     #add a bounds check
-    if (row != 0 and col != 0) and (row != gridLength-1 and col != gridLength-1):
-        if grid[row][col] > grid[row][col+1]: #to the right
-            print("front is smaller")
-            if row != 0 or row != gridLength-1:
-                col +=1
-                return parse_trees(grid, gridLength, row, col)
-        elif grid[row][col] > grid[row][col-1]: #looking behind
-            print("back is smaller")
-            if row != 0 or row != gridLength-1:
-                col -=1
-                return parse_trees(grid, gridLength, row, col)
-        elif grid[row][col] > grid[row+1][col]: #below
-            print("below is smaller")
-            if col != 0 or col != gridLength-1:
-                row += 1
-                parse_trees(grid, gridLength, row, col)
-        elif grid[row][col] > grid[row-1][col]: #above
-            print("above is smaller")
-            if col != 0 or col != gridLength-1:
-                row -= 1
-                parse_trees(grid, gridLength, row, col)
-        else: #must be viable from that path
+    treeLocations = {}
+    if (row !=0 and col !=0) and (row != gridLength-1 and col != gridLength-1) and grid[row][col] != 'X':
+        if (grid[row][col] > grid[row][col+1]) or (grid[row][col] > grid[row][col-1]) or (grid[row][col] > grid[row-1][col]) or (grid[row][col] > grid[row+1][col]):
             print("tree visible")
+            treeLocations.update({row:col})
+            print(treeLocations)
             return 1
-    
-        
-        
 
 def solution_part_2():
     FILENAME = "data/1-input.txt"
