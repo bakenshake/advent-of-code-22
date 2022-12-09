@@ -52,7 +52,7 @@ class TreeNode:
       nodes_to_visit += current_node.children
 
 def solution_part_1():
-    FILENAME = "data/7-input.txt"
+    FILENAME = "data/7-sample.txt"
     file_input = input_as_lines(FILENAME)
     #print(file_input)
     all_directories = []
@@ -76,7 +76,9 @@ def solution_part_1():
                     dir = i.replace("$ cd ", "")
                     #print("--dir changed to: " + dir)
                     if dir not in all_directories:
-                        all_directories.append(dir)
+                        newDir = []
+                        newDir.append(dir)
+                        all_directories.append(newDir)
                 elif cd != '/':
                     #dir change out
                     #print("--dir change out")
@@ -89,31 +91,46 @@ def solution_part_1():
             #this dir is a child of a dir
             if dir != "root":
                 dirChild = i.replace("dir ", "")
-                #print("--dir child: "+dirChild)
+                dir_idx = all_directories.index([dir])
+                all_directories[dir_idx].append(dirChild)
+                print("--dir child: "+dirChild)
             if dir == "root" and dir not in all_directories: #for the first dir only
-                all_directories.append(dir)
+                newDir = []
+                newDir.append(dir)
+                all_directories.append(newDir)
             #print(dir)
             #print("--curr dir: " + dir)
         else:
             #add the file size to the current directory
-            #print("--file listed in directory: " + dir)
+            print("--file listed in directory: " + dir)
             directory_size = re.findall("\d+", i)
             join = ""
             directory_size = join.join(directory_size)
-            #print("--dir file size is: " + directory_size)
+            print("--dir file size is: " + directory_size)
             dir_value_pairs[directory_size] = dir
     
     print("-----------------------")
-    #print(all_directories)
+    print(all_directories)
+    #total_directories(dir_value_pairs)
     #print(dir_value_pairs)
     calculate_file_size(all_directories, dir_value_pairs)
     #print(all_directories)
     #print(dir_value_pairs)
 
+def total_directories(dir_value_pairs):
+
+    dir_totals = {}
+    total = 0
+
+    for key in dir_value_pairs:
+        print(key)
+
+
 def calculate_file_size(directory_list, dir_value_pairs):
             
     #remove all root entries
     dir_value_pairs = {key:val for key, val in dir_value_pairs.items() if val != "root"}
+    print(dir_value_pairs)
 
     dir_totals = {}
     total = 0

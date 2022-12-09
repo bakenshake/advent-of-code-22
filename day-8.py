@@ -52,11 +52,16 @@ def print_grid(grid):
 def check_visibility(grid, gridLength, rowCount):
 
     print_grid(grid)
-
+    rowLength = len(grid)
+    colLength = len(grid[0])
     trees = 0
     for row in range(0, len(grid)):
         for col in range(0,len(grid)):
-            if parse_trees(grid, gridLength, row, col) == 1:
+            if row == 0 or row == rowLength-1:
+                trees += 1
+            elif col == 0 or col == colLength-1:
+                trees += 1
+            elif parse_trees(grid, gridLength, row, col) == 1:
                 trees += 1
                 grid[row][col] = 'X'
                 #print_grid(grid)
@@ -75,7 +80,6 @@ def check_visibility(grid, gridLength, rowCount):
 
 def parse_trees(grid, gridLength, row, col):
     #print("Current tree: "+grid[row][col]+ " at row: " +str(row)+" col: "+str(col))
-    #add a bounds check
     treeLocations = {}
     if (row !=0 and col !=0) and (row != gridLength-1 and col != gridLength-1) and grid[row][col] != 'X':
         if (grid[row][col] > grid[row][col+1]) or (grid[row][col] > grid[row][col-1]) or (grid[row][col] > grid[row-1][col]) or (grid[row][col] > grid[row+1][col]):
