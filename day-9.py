@@ -24,7 +24,6 @@ def input_as_ints(filename:str) -> List[int]:
 """
 Constraints:
 
-0. Find largest number from puzzle input to determine size of grid
 1. If the H is ever 2 steps up, down, left, or right from the T, the T must move one step in THAT direction to be close enough
     - Check through each move and update T, not after each row of moves
     - If the H is diagonally away, it could still be touching
@@ -36,7 +35,7 @@ Constraints:
 
 
 def solution_part_1():
-    FILENAME = "data/9-input.txt"
+    FILENAME = "data/9-sample.txt"
     file_input = input_as_lines(FILENAME)
     print(file_input)
 
@@ -45,7 +44,14 @@ def solution_part_1():
     tail = [0,0]
     start = [0,0]
     tail_positions = set()
+    tails = []
     print(head, tail, start)
+
+    for j in range(0, 9, 1):
+        new_tail = [0,0]
+        tails.append(new_tail)
+    
+    print(tails)
 
     for i in file_input:
         move = re.findall("^\w", i)
@@ -58,22 +64,22 @@ def solution_part_1():
                 #step
                 head[1] += 1
                 #check T distance
-                if check_tail(head, tail, prev_head, move[0]) == 1:
+                if check_tail(head, tail, prev_head, move[0], tails) == 1:
                     print("move tail")
                 iterator -= 1
             elif move[0] == 'L':
                 head[1] -= 1
-                if check_tail(head, tail, prev_head, move[0]) == 1:
+                if check_tail(head, tail, prev_head, move[0], tails) == 1:
                     print("move tail")
                 iterator -= 1
             elif move[0] == 'U':
                 head[0] += 1
-                if check_tail(head, tail, prev_head, move[0]) == 1:
+                if check_tail(head, tail, prev_head, move[0], tails) == 1:
                     print("move tail")
                 iterator -= 1
             elif move[0] == 'D':
                 head[0] -= 1
-                if check_tail(head, tail, prev_head, move[0]) == 1:
+                if check_tail(head, tail, prev_head, move[0], tails) == 1:
                     print("move tail")
                 iterator -= 1
 
@@ -86,14 +92,17 @@ def solution_part_1():
     print(unique_positions)
     print(len(unique_positions))
 
-def check_tail(head, tail, prev_head, move):
+def check_tail(head, tail, prev_head, move, tails):
     print(move)
-    if ((abs(head[0] - tail[0])) >= 2) and move == 'U': #moving right
+
+    iter_head = tail #set current tail to be the next head
+    next_tail = tails[j] #set the tail to be the tail after the current one
+    if ((abs(head[0] - tail[0])) >= 2) and move == 'U': #moving up
         print("x value needs adjusted")
         tail[0] += 1
         tail[1] = head[1]
         return 1
-    elif ((abs(head[1] - tail[1])) >= 2) and move == 'R': #moving up
+    elif ((abs(head[1] - tail[1])) >= 2) and move == 'R': #moving right
         print("y needs adjusted")
         tail[1] += 1
         tail[0] = head[0]
@@ -103,7 +112,7 @@ def check_tail(head, tail, prev_head, move):
         tail[0] -= 1
         tail[1] = head[1]
         return 1
-    elif ((abs(head[1] - tail[1])) >= 2) and move == 'L':
+    elif ((abs(head[1] - tail[1])) >= 2) and move == 'L': #moving left
         print("y needs adjusted")
         tail[1] -= 1
         tail[0] = head[0]
