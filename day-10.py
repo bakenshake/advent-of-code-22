@@ -22,7 +22,7 @@ def input_as_ints(filename:str) -> List[int]:
     return list(map(line_as_int, lines))
 
 def solution_part_1():
-    FILENAME = "data/10-sample.txt"
+    FILENAME = "data/10-input.txt"
     file_input = input_as_lines(FILENAME)
 
     #create the grid
@@ -30,78 +30,97 @@ def solution_part_1():
     #print_grid(crt_screen)
     print("---------------------------------")
     #flatten into one big line
-    crt_screen = [ele for crt_screen in crt_screen for ele in crt_screen]
+    #crt_screen = [ele for crt_screen in crt_screen for ele in crt_screen]
     
     cycle = 0
     register_x = 1
+    row = 0
     signal_strength = 0
     all_signals = []
     sprite = '#' #draw what X equals to and +1 and -1 to draw the full sprite
     for i in file_input:
-        #print(i)
         if i == "noop":
             cycle += 1
-            draw_pixel(cycle, crt_screen, register_x, sprite)
+            draw_pixel(cycle, crt_screen, register_x, sprite, row)
+            if check_signal(cycle) == 1:
+                row += 1
         else:
             if re.search('-', i):
                 add_cycle = re.findall("-\d+", i)
                 cycle += 1
-                draw_pixel(cycle, crt_screen, register_x, sprite)
+                draw_pixel(cycle, crt_screen, register_x, sprite, row)
                 if check_signal(cycle) == 1:
-                    signal_strength = register_x * cycle
-                    all_signals.append(signal_strength)
+                    #signal_strength = register_x * cycle
+                    #all_signals.append(signal_strength)
+                    row += 1
                 cycle += 1
-                draw_pixel(cycle, crt_screen, register_x, sprite)
+                draw_pixel(cycle, crt_screen, register_x, sprite, row)
                 #draw pixel
                 if check_signal(cycle) == 1:
-                    signal_strength = register_x * cycle
-                    all_signals.append(signal_strength)
+                    #signal_strength = register_x * cycle
+                    #all_signals.append(signal_strength)
+                    row += 1
             else:
                 add_cycle = re.findall("\d+", i)
                 cycle += 1
-                draw_pixel(cycle, crt_screen, register_x, sprite)
+                draw_pixel(cycle, crt_screen, register_x, sprite, row)
                 #draw pixel
                 if check_signal(cycle) == 1:
-                    signal_strength = register_x * cycle
-                    all_signals.append(signal_strength)
+                    #signal_strength = register_x * cycle
+                    #all_signals.append(signal_strength)
+                    row += 1
                 cycle += 1
-                draw_pixel(cycle, crt_screen, register_x, sprite)
+                draw_pixel(cycle, crt_screen, register_x, sprite, row)
                 #draw pixel
                 if check_signal(cycle) == 1:
-                    signal_strength = register_x * cycle
-                    all_signals.append(signal_strength)
+                    #signal_strength = register_x * cycle
+                    #all_signals.append(signal_strength)
+                    row += 1
             
             register_x += int(add_cycle[0])
 
-    print(crt_screen)
-    print(all_signals)
-    total = 0
-    for k in range(0,len(all_signals)):
-        total += all_signals[k]
+    #print(crt_screen)
+    print_screen(crt_screen)
+    #print(all_signals)
+    #total = 0
+    #for k in range(0,len(all_signals)):
+    #    total += all_signals[k]
 
-    print(total)
+    #print(total)
+
+def print_screen(crt_screen):
+    row = []
+    readout = []
+    for j in range(0, len(crt_screen)):
+        for k in range(0,len(crt_screen)):
+            row = ''.join(crt_screen[j])
+        print(row)
+        row = []
+
     
 def check_signal(cycle):
-    if (cycle == 20) or (cycle == 60) or (cycle == 100) or (cycle == 140) or (cycle == 180) or (cycle == 220):
+    if (cycle == 40) or (cycle == 80) or (cycle == 120) or (cycle == 160) or (cycle == 200) or (cycle == 240):
         return 1
     else:
         return -1
 
-def draw_pixel(cycle, crt_screen, register_x, sprite):
-    if (cycle == register_x) or (cycle == (register_x+1)) or ((cycle ==(register_x-1))):
-        crt_screen[cycle-1] = sprite
+def draw_pixel(cycle, crt_screen, register_x, sprite, row):
+    cycle_adjuster = cycle
+    if row == 1:
+        cycle_adjuster -= 40
+    elif row == 2:
+        cycle_adjuster -= 80
+    elif row == 3:
+        cycle_adjuster -= 120
+    elif row == 4:
+        cycle_adjuster -= 160
+    elif row == 5:
+        cycle_adjuster -= 200
+    elif row == 6:
+        cycle_adjuster -= 240
 
-def print_screen(crt_screen):
-    screen = []
-    row = []
-    for j in crt_screen:
-        if len(row) != 39:
-            row = ' '.join(j)
-        elif len(row) == 39:
-            screen.append(row)
-            row = []
-    print(screen)
-        
+    if ((cycle_adjuster-1) == (register_x-1)) or ((cycle_adjuster-1) == register_x) or ((cycle_adjuster-1) == (register_x+1)):
+        crt_screen[row][cycle_adjuster-1] = sprite        
 
 def create_grid(horizontal, vertical):
     grid = [[i for i in range(horizontal)] for n in range(vertical)]
