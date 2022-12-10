@@ -27,11 +27,7 @@ def solution_part_1():
 
     #create the grid
     crt_screen = create_grid(40, 6)
-    #print_grid(crt_screen)
     print("---------------------------------")
-    #flatten into one big line
-    #crt_screen = [ele for crt_screen in crt_screen for ele in crt_screen]
-    
     cycle = 0
     register_x = 1
     row = 0
@@ -90,13 +86,11 @@ def solution_part_1():
 
 def print_screen(crt_screen):
     row = []
-    readout = []
     for j in range(0, len(crt_screen)):
         for k in range(0,len(crt_screen)):
             row = ''.join(crt_screen[j])
         print(row)
         row = []
-
     
 def check_signal(cycle):
     if (cycle == 40) or (cycle == 80) or (cycle == 120) or (cycle == 160) or (cycle == 200) or (cycle == 240):
