@@ -27,30 +27,6 @@ def solution_part_2():
     FILENAME = "data/1-input.txt"
     file_input = input_as_lines(FILENAME)
 
-class TreeNode:
-  def __init__(self, value):
-    self.value = value
-    self.children = [] # references to other nodes
-
-  def add_child(self, child_node):
-    # creates parent-child relationship
-    print("Adding " + child_node.value)
-    self.children.append(child_node) 
-    
-  def remove_child(self, child_node):
-    # removes parent-child relationship
-    print("Removing " + child_node.value + " from " + self.value)
-    self.children = [child for child in self.children 
-                     if child is not child_node]
-
-  def traverse(self):
-    # moves through each node referenced from self downwards
-    nodes_to_visit = [self]
-    while len(nodes_to_visit) > 0:
-      current_node = nodes_to_visit.pop()
-      print(current_node.value)
-      nodes_to_visit += current_node.children
-
 def solution_part_1():
     FILENAME = "data/7-sample.txt"
     file_input = input_as_lines(FILENAME)
@@ -93,7 +69,7 @@ def solution_part_1():
                 dirChild = i.replace("dir ", "")
                 dir_idx = all_directories.index([dir])
                 all_directories[dir_idx].append(dirChild)
-                print("--dir child: "+dirChild)
+                #print("--dir child: "+dirChild)
             if dir == "root" and dir not in all_directories: #for the first dir only
                 newDir = []
                 newDir.append(dir)
@@ -102,29 +78,84 @@ def solution_part_1():
             #print("--curr dir: " + dir)
         else:
             #add the file size to the current directory
-            print("--file listed in directory: " + dir)
+            #print("--file listed in directory: " + dir)
             directory_size = re.findall("\d+", i)
             join = ""
             directory_size = join.join(directory_size)
-            print("--dir file size is: " + directory_size)
+            #print("--dir file size is: " + directory_size)
             dir_value_pairs[directory_size] = dir
     
     print("-----------------------")
     print(all_directories)
-    #total_directories(dir_value_pairs)
-    #print(dir_value_pairs)
-    calculate_file_size(all_directories, dir_value_pairs)
-    #print(all_directories)
-    #print(dir_value_pairs)
+    dir_totals = total_directories(dir_value_pairs)
+    #calculate_file_size(all_directories, dir_value_pairs)
+    print(dir_totals)
+    values = []
+    for i in range(0, len(all_directories)):
+        if all_directories[i][0] == "root":
+            all_directories[i].pop(0)
+        else:
+            for j in range(0, len(all_directories[i])):
+                dir_to_pull = all_directories[i][j]
+                all_directories[i][j] = dir_totals.get(dir_to_pull)
+            
+    dir_sum = [sum(x) for x in all_directories]
+    print(all_directories)
+    print(dir_sum)
+
+    total = 0
+    for j in range(0, len(dir_sum)):
+        if dir_sum[j] <= 100000:
+            total += dir_sum[j]
+
+    print(total)
+
 
 def total_directories(dir_value_pairs):
-
+    
+    #remove all root entries
+    dir_value_pairs = {key:val for key, val in dir_value_pairs.items() if val != "root"}
+    #print(dir_value_pairs)
+    
     dir_totals = {}
+
+    for key, value in dir_value_pairs.items():
+        dir_totals.update({value : 0})
+
+
+    #print(dir_totals)    
+
+    #convert to nested list
+    dir_value_pairs_list = list(dir_value_pairs.items())
+    #print(dir_value_pairs_list)
     total = 0
 
-    for key in dir_value_pairs:
-        print(key)
+    for i in range(0, len(dir_value_pairs_list)):
+        #print(dir_value_pairs_list[i][0])
+        if i == 0:
+            start_dir = dir_value_pairs_list[i][1]
+        
+        if start_dir == dir_value_pairs_list[i][1]:
+            total += int(dir_value_pairs_list[i][0])
+            #print(start_dir, total)
+            if i < len(dir_value_pairs_list)-1 and dir_value_pairs_list[i+1][1] != start_dir:
+                #add total to dir_totals
+                dir_totals.update({start_dir:total})
+            if i == len(dir_value_pairs_list)-1:
+                dir_totals.update({start_dir:total})
+        else:
+            start_dir = dir_value_pairs_list[i][1]
+            total = 0
+            total += int(dir_value_pairs_list[i][0])
+            #print(start_dir, total)
+            dir_totals.update({start_dir:total})
+            start_dir = dir_value_pairs_list[i+1][1]
+            total = 0 
+    
+    #print(dir_totals)
 
+    return dir_totals
+  
 
 def calculate_file_size(directory_list, dir_value_pairs):
             

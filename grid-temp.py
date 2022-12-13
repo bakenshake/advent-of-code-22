@@ -39,19 +39,6 @@ def solution_part_1():
     grid = create_grid(grid_length)
     print_grid(grid)
 
-    #init starting positions
-    head = {}
-    tail = {}
-    start = {}
-    head, tail, start = init_rope(grid, grid_length)
-
-def init_rope(grid, grid_length):
-    head = {(0,grid_length)}
-    tail = {(0,grid_length)}
-    start = tail
-
-    return head, tail, start
-
 def create_grid(high_num):
     grid = [[i for i in range(high_num)] for n in range(high_num)]
 
