@@ -1,0 +1,38 @@
+        if i != '':
+            pair.append(i)
+        if len(pair) == 2:
+            #print("examine pair")
+            index = 0
+            clean_idx = 0
+            left = pair[0]
+            right = pair[1]
+            pair = []
+            
+            pair_one = []
+            pair_two = []
+            temp_list = []
+            for j in range(0, len(left)):
+                if left[j] == '[':
+                    #start a new list
+                    if j != len(left):
+                        temp_list = []
+                elif left[j] == ']':
+                    #end a list
+                    pair_one.append(temp_list)
+                    #print(pair_one)
+                    #print("list")
+                    if j != len(left):
+                        temp_list = []
+                elif left[j] == ',':
+                    #new number or list or bracket - look ahead
+                    continue
+                elif int(left[j]) in possible_ints:
+                    #print("it's a number")
+                    temp_list.append(int(left[j]))
+                    #print(temp_list)
+                    #if int(left[j]) < int(right[j]):
+                    #    print("left is smaller")
+                    #    index += j 
+                    #    index += clean_idx
+                    #    print("index for right ordered pair: " +str(index))
+            print(pair_one)

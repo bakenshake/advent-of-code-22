@@ -112,11 +112,10 @@ def solution_part_1():
 
     total = 0
     for j in range(0, len(dir_sum)):
-        if dir_sum[j] <= 100000:
+        if dir_sum[j] < 100000:
             total += dir_sum[j]
 
     print(total)
-
 
 def total_directories(dir_value_pairs):
     
