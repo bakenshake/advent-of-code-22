@@ -28,12 +28,13 @@ def solution_part_2():
     file_input = input_as_lines(FILENAME)
 
 def solution_part_1():
-    FILENAME = "data/7-sample.txt"
+    FILENAME = "data/7-input.txt"
     file_input = input_as_lines(FILENAME)
     #print(file_input)
     all_directories = []
     dir_value_pairs = {}
     dir = "root"
+    parentDir = ''
     for i in file_input:
         commands = re.findall('^\$', i) #matching commands
         directories = re.findall('^dir \w+', i)
@@ -48,6 +49,7 @@ def solution_part_1():
                 if cd != '.' and cd != '/':
                     #dir change in
                     prevDir = dir
+                    parentDir = dir
                     #print("--prev dir: " + prevDir)
                     dir = i.replace("$ cd ", "")
                     #print("--dir changed to: " + dir)
@@ -55,11 +57,13 @@ def solution_part_1():
                         newDir = []
                         newDir.append(dir)
                         all_directories.append(newDir)
+                        multiple_children = False
                 elif cd != '/':
                     #dir change out
                     #print("--dir change out")
                     dir = all_directories[len(all_directories)-1]
                     #print("--dir changed to: " + dir)
+                    multiple_children = False
                 elif cd == '/':
                     dir = "root"
                     #print("--root")                 
@@ -67,13 +71,15 @@ def solution_part_1():
             #this dir is a child of a dir
             if dir != "root":
                 dirChild = i.replace("dir ", "")
-                dir_idx = all_directories.index([dir])
+                if multiple_children == False:
+                    dir_idx = all_directories.index([dir])
                 all_directories[dir_idx].append(dirChild)
-                #print("--dir child: "+dirChild)
+                multiple_children = True
             if dir == "root" and dir not in all_directories: #for the first dir only
                 newDir = []
                 newDir.append(dir)
                 all_directories.append(newDir)
+                multiple_children = False
             #print(dir)
             #print("--curr dir: " + dir)
         else:
@@ -88,9 +94,8 @@ def solution_part_1():
     print("-----------------------")
     print(all_directories)
     dir_totals = total_directories(dir_value_pairs)
-    #calculate_file_size(all_directories, dir_value_pairs)
+    print("-----------------------")
     print(dir_totals)
-    values = []
     for i in range(0, len(all_directories)):
         if all_directories[i][0] == "root":
             all_directories[i].pop(0)
@@ -98,6 +103,8 @@ def solution_part_1():
             for j in range(0, len(all_directories[i])):
                 dir_to_pull = all_directories[i][j]
                 all_directories[i][j] = dir_totals.get(dir_to_pull)
+                if all_directories[i][j] == None:
+                    all_directories[i][j] = 0
             
     dir_sum = [sum(x) for x in all_directories]
     print(all_directories)
@@ -155,47 +162,6 @@ def total_directories(dir_value_pairs):
     #print(dir_totals)
 
     return dir_totals
-  
-
-def calculate_file_size(directory_list, dir_value_pairs):
-            
-    #remove all root entries
-    dir_value_pairs = {key:val for key, val in dir_value_pairs.items() if val != "root"}
-    print(dir_value_pairs)
-
-    dir_totals = {}
-    total = 0
-    iterator = 0
-    step = 1
-    window = directory_list[iterator]
-    for file_size in dir_value_pairs:
-        directory = dir_value_pairs[file_size]
-        print("Key: "+file_size+" ----- Value: "+directory)
-        #print("iterating on: "+directory_list[iterator])
-        #print(iterator)
-        #print(len(directory_list))
-        if directory == "root" or directory == "ls": #skip root entries for now
-            continue
-
-        window = directory_list[step]
-        if directory == window:
-            total += int(file_size)
-            print("Looking at directory: " +directory)
-            print("Current total is: " + str(total))
-            dir_totals[directory] = total
-            if iterator != len(dir_value_pairs)-1:
-                peekOne = next( v for i, v in enumerate(dir_value_pairs.items()) if i == iterator+1)
-                #peekTwo = next( v for i, v in enumerate(dir_value_pairs.items()) if i == iterator+2)
-                #print(peek[0])
-                #print(peek[1])
-                if window != peekOne[1]:
-                    #iterator +=1
-                    print("---- NEXT DIRECTORY ----")
-                    step += 1
-                    total = 0 
-                iterator += 1
-
-    print(dir_totals)
             
 solution_part_1()
 
