@@ -134,7 +134,7 @@ def solution_part_1():
             
             print("--------------------")
             print(head, tails)
-            print("--------------------")
+            #print("--------------------")
             #print(tail_positions)
             if iterator == 0:
                 print(" ----------- NEXT MOVE -----------")
@@ -143,7 +143,7 @@ def solution_part_1():
     
     unique_positions = []
     [unique_positions.append(x) for x in tail_positions if x not in unique_positions]
-    #print(unique_positions)
+    print(unique_positions)
     print(len(unique_positions))
 
 def check_tail(head, tail, prev_head, move):
@@ -171,10 +171,24 @@ def check_tail(head, tail, prev_head, move):
         tail[1] -= 1
         tail[0] = head[0]
         return 1
-    elif (head[0] == tail[1]) and (head[1] == tail[0]):
+    elif ((abs(head[1] - tail[1]) >= 2) and (abs(head[0] - tail[0]) >= 1)) or ((abs(head[0] - tail[0]) >= 2) and abs(head[1] - tail[1])) >= 1:
         #print("diagonally apart")
-        #tail = prev_head
-        return 0
+        if move[0] == 'U':
+            tail[0] += 1
+            tail[1] = prev_head[1]
+            return 1
+        elif move[0] == 'R':
+            tail[1] += 1
+            tail[0] = prev_head[0]
+            return 1
+        elif move[0] == 'D':
+            tail[0] -= 1
+            tail[1] = prev_head[1]
+            return 1
+        elif move[0] == 'L':
+            tail[1] -= 1
+            tail[0] = prev_head[0]
+            return 1
     else:
         return -1 #head and tail are close enough
 

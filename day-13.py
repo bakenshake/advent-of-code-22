@@ -26,7 +26,7 @@ def input_as_ints(filename:str) -> List[int]:
 def solution_part_1():
     FILENAME = "data/13-sample.txt"
     file_input = input_as_lines(FILENAME)
-    print(file_input)
+    #print(file_input)
     pair = []
     left = ''
     right = ''
@@ -71,5 +71,64 @@ def solution_part_1():
                     #    index += clean_idx
                     #    print("index for right ordered pair: " +str(index))
     print(all_pairs)
+    check_pairs(all_pairs)
+
+def check_pairs(all_pairs):
+    
+    indices = []
+    pair_num = 1
+    for k in range(0, len(all_pairs)-1):
+        iterator = k + 1
+        if iterator % 2 == 0 and k != 0:
+            pair_num += 1
+            continue
+        left = all_pairs[k]
+        right = all_pairs[k+1]
+
+        print(left)
+        print(right)
+        print("\n")
+
+        #make this its own function and recursively call it for nested lists
+        parse_packet(left, right, pair_num, indices)
+            
+    print(indices)
+
+def parse_packet(left, right, pair_num, indices):
+
+    multi_list = False
+
+    for j in range(0, len(left)):
+            if j == len(right) and j != len(left):
+                print("end of right - out of order")
+                break
+
+            print(left[j])
+            print(right[j])
+            if (type(left[j]) == int and type(right[j] == list)) and type(right[j]) != int:
+                left[j] = [left[j]]
+                parse_packet(left[j], right[j], pair_num, indices)
+            elif (type(left[j]) == int and type(right[j] != list)) and type(right[j]) != int:
+                right[j] = int(right[j])
+                parse_packet(left[j], right[j], pair_num, indices)
+            elif (type(left[j]) == list and type(right[j] != int)) and type(right[j]) != list:
+                right[j] = [right[j]]
+                parse_packet(left[j], right[j], pair_num, indices)
+            elif left[j] < right[j]:
+                print("in the right order")
+                indices.append(pair_num)
+                return 1
+            elif left[j] > right[j]:
+                print("right side smaller - out of order")
+                return 1
+            elif left[j] == []:
+                print("left side out of items - right order")
+                return 1
+            elif any(isinstance(i, list) for i in left) and len(left[j]) > 1: #if it has nested lists AND if it's not as single element
+                multi_list = True
+                #go to next list
+                parse_packet(left[j][j], right[j], pair_num, indices)
+
+
 
 solution_part_1()

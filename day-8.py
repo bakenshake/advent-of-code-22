@@ -47,21 +47,21 @@ def print_grid(grid):
     #print grid
     for index, tree in enumerate(grid):
         print(index, tree)
-        gridLength = len(tree)
 
 def check_visibility(grid, gridLength, rowCount):
 
-    print_grid(grid)
+    #print_grid(grid)
     rowLength = len(grid)
     colLength = len(grid[0])
     trees = 0
+    treeLocations = []
     for row in range(0, len(grid)):
         for col in range(0,len(grid)):
-            if row == 0 or row == rowLength-1:
-                trees += 1
-            elif col == 0 or col == colLength-1:
-                trees += 1
-            elif parse_trees(grid, gridLength, row, col) == 1:
+            if row == 0 or (row == rowLength-1):
+                continue
+            elif col == 0 or (col == colLength-1):
+                continue
+            elif parse_trees(grid, gridLength, row, col, treeLocations) == 1:
                 trees += 1
                 grid[row][col] = 'X'
                 #print_grid(grid)
@@ -75,22 +75,18 @@ def check_visibility(grid, gridLength, rowCount):
     print("Edge trees: "+str(edgeTrees))
     print("Grid length: " +str(gridLength))
     print("Row count: " +str(rowCount))
+    #print("Trees before adding edge: "+str(trees))
     trees += edgeTrees
     print("Total Trees: "+str(trees))
 
-def parse_trees(grid, gridLength, row, col):
+def parse_trees(grid, gridLength, row, col, treeLocations):
     #print("Current tree: "+grid[row][col]+ " at row: " +str(row)+" col: "+str(col))
-    treeLocations = {}
-    if (row !=0 and col !=0) and (row != gridLength-1 and col != gridLength-1) and grid[row][col] != 'X':
+    if (row !=0 and col !=0) and (row != gridLength and col != gridLength) and grid[row][col] != 'X':
         if (grid[row][col] > grid[row][col+1]) or (grid[row][col] > grid[row][col-1]) or (grid[row][col] > grid[row-1][col]) or (grid[row][col] > grid[row+1][col]):
-            print("tree visible")
-            treeLocations.update({row:col})
-            print(treeLocations)
+            #print("tree visible at: " +str(row), str(col))
+            treeLocations.append(grid[row][col])
+            #print(treeLocations)
             return 1
-
-def solution_part_2():
-    FILENAME = "data/1-input.txt"
-    file_input = input_as_lines(FILENAME)
 
 solution_part_1()
 
