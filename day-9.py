@@ -65,71 +65,43 @@ def solution_part_1():
                 #step
                 head[1] += 1
                 #check T distance
-                if check_tail(head, tail, prev_head, move[0] ) == 1:
+                if check_tail(head, tail, move[0] ) == 1:
                     print("move tail")
                     iter_head = head
-                    prev_tail = tail
-                    count = 0
                     for j in tails:
-                        if check_tail(iter_head, j, prev_tail, move[0]) == 1:
-                            prev_tail = iter_head
-                            iter_head = j
-                            count += 1
-                            if count == 9:
-                                tail_positions.add((j[0], j[1]))
-                                print("-- added position: " +str(j[0])+", "+str(j[1]))
-                                count = 0
+                        check_tail(iter_head, j, move[0])
+                        iter_head = j
+                    tail_positions.add((iter_head[0], iter_head[1]))
                 iterator -= 1
             elif move[0] == 'L':
                 head[1] -= 1
-                if check_tail(head, tail, prev_head, move[0]) == 1:
+                if check_tail(head, tail, move[0]) == 1:
                     print("move tail")
                     iter_head = head
-                    count = 0
-                    prev_tail = tail
                     for j in tails:
-                        if check_tail(iter_head, j, prev_tail, move[0]) == 1:
-                            prev_tail = iter_head
-                            iter_head = j
-                            count += 1
-                            if count == 9:
-                                tail_positions.add((j[0], j[1]))
-                                print("-- added position: " +str(j[0])+", "+str(j[1]))
-                                count = 0
+                        check_tail(iter_head, j, move[0])
+                        iter_head = j
+                    tail_positions.add((iter_head[0], iter_head[1]))
                 iterator -= 1
             elif move[0] == 'U':
                 head[0] += 1
-                if check_tail(head, tail, prev_head, move[0]) == 1:
+                if check_tail(head, tail, move[0]) == 1:
                     print("move tail")
                     iter_head = head
-                    count = 0
-                    prev_tail = tail
                     for j in tails:
-                        if check_tail(iter_head, j, prev_tail, move[0]) == 1:
-                            prev_tail = iter_head
-                            iter_head = j
-                            count += 1
-                            if count == 9:
-                                tail_positions.add((j[0], j[1]))
-                                print("-- added position: " +str(j[0])+", "+str(j[1]))
-                                count = 0
+                        check_tail(iter_head, j, move[0])
+                        iter_head = j
+                    tail_positions.add((iter_head[0], iter_head[1]))
                 iterator -= 1
             elif move[0] == 'D':
                 head[0] -= 1
-                if check_tail(head, tail, prev_head, move[0]) == 1:
+                if check_tail(head, tail, move[0]) == 1:
                     print("move tail")
                     iter_head = head
-                    count = 0
-                    prev_tail = tail
                     for j in tails:
-                        if check_tail(iter_head, j, prev_tail, move[0]) == 1:
-                            prev_tail = iter_head
-                            iter_head = j
-                            count += 1
-                            if count == 9:
-                                tail_positions.add((j[0], j[1]))
-                                #print("-- added position: " +str(j[0])+", "+str(j[1]))
-                                count = 0
+                        check_tail(iter_head, j, move[0])
+                        iter_head = j
+                    tail_positions.add((iter_head[0], iter_head[1]))
                 iterator -= 1
             
             print("--------------------")
@@ -146,7 +118,7 @@ def solution_part_1():
     print(unique_positions)
     print(len(unique_positions))
 
-def check_tail(head, tail, prev_head, move):
+def check_tail(head, tail, move):
     #print(move)
 
     #iter_head = prev_head #set current tail to be the next head
@@ -175,19 +147,21 @@ def check_tail(head, tail, prev_head, move):
         #print("diagonally apart")
         if move[0] == 'U':
             tail[0] += 1
-            tail[1] = prev_head[1]
+            tail[1] += 1
             return 1
         elif move[0] == 'R':
             tail[1] += 1
-            tail[0] = prev_head[0]
+            tail[0] += 1
+            #tail[0] = head[0]
             return 1
         elif move[0] == 'D':
             tail[0] -= 1
-            tail[1] = prev_head[1]
+            tail[1] -= 1
+            #tail[1] = head[1]
             return 1
         elif move[0] == 'L':
             tail[1] -= 1
-            tail[0] = prev_head[0]
+            tail[0] -= 1
             return 1
     else:
         return -1 #head and tail are close enough
