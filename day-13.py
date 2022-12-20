@@ -97,7 +97,9 @@ def check_pairs(all_pairs):
 def parse_packet(left, right, pair_num, indices):
 
     multi_list = False
-
+    if type(left) == int:
+        left = [left]
+        
     for j in range(0, len(left)):
             if j == len(right) and j != len(left):
                 print("end of right - out of order")
@@ -121,13 +123,14 @@ def parse_packet(left, right, pair_num, indices):
             elif left[j] > right[j]:
                 print("right side smaller - out of order")
                 return 1
-            elif left[j] == []:
+            elif not left[j]:
                 print("left side out of items - right order")
+                indices.append(pair_num)
                 return 1
-            elif any(isinstance(i, list) for i in left) and len(left[j]) > 1: #if it has nested lists AND if it's not as single element
-                multi_list = True
+            #elif any(isinstance(i, list) for i in left) and len(left[j]) > 1: #if it has nested lists AND if it's not as single element
+            #    multi_list = True
                 #go to next list
-                parse_packet(left[j][j], right[j], pair_num, indices)
+            #    parse_packet(left[j][j], right[j], pair_num, indices)
 
 
 

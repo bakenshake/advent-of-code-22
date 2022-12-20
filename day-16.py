@@ -41,4 +41,72 @@ def solution_part_1():
     print(valve_and_flow)
     print(tunnels)
 
+    total_pressure = 0
+    open_valves = []
+    minutes = 1
+    start = tunnels[0][0]
+    curr_pos = start
+    prev_valve_loc = start
+    while minutes <= 30:
+        #move to the next valve
+        print("----- "+str(minutes)+" ------")
+        prev_valve_loc = curr_pos #to make sure we don't visit the same one we were JUST at
+        curr_pos = determine_movement(valve_and_flow, tunnels, curr_pos, prev_valve_loc)
+        print("Moving to valve: "+curr_pos)
+        minutes += 1 #one minute to move to a valve
+        print("----- "+str(minutes)+" ------")
+        #calculate pressure based on currently opened valves
+        total_pressure += calculate_pressure(valve_and_flow, open_valves)
+        #check if we open the valve we're visiting
+        valve_to_open = to_open_or_not()
+        #if we do open the valve, add to open_valves
+        if valve_to_open:
+            open_valves.append(curr_pos)
+        minutes += 1 #one minute to open a valve
+        #calculate pressure
+        total_pressure += calculate_pressure(valve_and_flow, open_valves)
+
+def calculate_pressure(valve_and_flow, open_valves):
+
+    pressure = 0
+    for i in open_valves:
+        flow_rate = valve_and_flow.get(i)
+        pressure += flow_rate
+
+    return pressure
+
+def to_open_or_not():
+    print("ayo")
+
+def determine_movement(valve_flow_pairs, valve_tunnels, curr_pos, prev_valve_loc):
+
+    #find the tunnels connected to the valve we're currently at
+    for i in range(0, len(valve_tunnels)):
+        if curr_pos == valve_tunnels[i][0]:
+            rates_to_check = valve_tunnels[i]
+            break
+
+    #print(rates_to_check)
+
+    valve_to_move = find_highest_rate(valve_flow_pairs, rates_to_check, prev_valve_loc)
+
+    return valve_to_move
+
+def find_highest_rate(valve_flow_pairs, rates_to_check, prev_valve_loc):
+
+    rates = []
+    for i in range(0, len(rates_to_check)):
+        if i == 0: 
+            continue
+        elif i > 0 and rates_to_check[i] != prev_valve_loc:
+            curr_rate = valve_flow_pairs.get(rates_to_check[i])
+            rates.append(curr_rate)
+    
+    #print(max(rates))
+
+    valve_to_move = [i for i in valve_flow_pairs if valve_flow_pairs[i]==max(rates)]
+    #print(valve_to_move)
+    
+    return valve_to_move[0]
+
 solution_part_1()
